@@ -30,6 +30,31 @@ public class Book {
     private Double price;
     private Integer availableQuantity;
 
+    public Book() {
+    }
+
+    public Book(
+            String title,
+            String author,
+            String isbn,
+            String genre,
+            String description,
+            String publisher,
+            LocalDate publicationYear,
+            Double price,
+            Integer availableQuantity
+    ) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.genre = genre;
+        this.description = description;
+        this.publisher = publisher;
+        this.publicationYear = publicationYear;
+        this.price = price;
+        this.availableQuantity = availableQuantity;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -104,37 +129,5 @@ public class Book {
 
     public void setAvailableQuantity(Integer availableQuantity) {
         this.availableQuantity = availableQuantity;
-    }
-
-    public Book(
-            String title,
-            String author,
-            String isbn,
-            String genre,
-            String description,
-            String publisher,
-            LocalDate publicationYear,
-            Double price,
-            Integer availableQuantity
-    ) {
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
-        this.genre = genre;
-        this.description = description;
-        this.publisher = publisher;
-        this.publicationYear = publicationYear;
-        this.price = price;
-        this.availableQuantity = availableQuantity;
-    }
-
-    public Book(
-            String title,
-            String author,
-            String isbn
-    ) {
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
     }
 }
