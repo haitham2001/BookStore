@@ -1,4 +1,4 @@
-package com.example.bookstore.book;
+package com.example.bookstore.models;
 
 import jakarta.persistence.*;
 
@@ -9,24 +9,14 @@ import java.time.LocalDate;
 public class Book {
 
     @Id
-    @SequenceGenerator(
-            name = "incrementSequence",
-            sequenceName = "incrementSequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "incrementSequence"
-    )
+    @SequenceGenerator(name = "book_SEQ", sequenceName = "book_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_SEQ")
     private Integer id;
 
     private String title;
     private String author;
     private String isbn;
     private String genre;
-    private String description;
-    private String publisher;
-    private LocalDate publicationYear;
     private Double price;
     private Integer availableQuantity;
 
@@ -38,9 +28,6 @@ public class Book {
             String author,
             String isbn,
             String genre,
-            String description,
-            String publisher,
-            LocalDate publicationYear,
             Double price,
             Integer availableQuantity
     ) {
@@ -48,9 +35,6 @@ public class Book {
         this.author = author;
         this.isbn = isbn;
         this.genre = genre;
-        this.description = description;
-        this.publisher = publisher;
-        this.publicationYear = publicationYear;
         this.price = price;
         this.availableQuantity = availableQuantity;
     }
@@ -89,30 +73,6 @@ public class Book {
 
     public void setGenre(String genre) {
         this.genre = genre;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
-
-    public LocalDate getPublicationYear() {
-        return publicationYear;
-    }
-
-    public void setPublicationYear(LocalDate publicationYear) {
-        this.publicationYear = publicationYear;
     }
 
     public Double getPrice() {

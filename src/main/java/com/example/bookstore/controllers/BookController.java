@@ -1,5 +1,7 @@
-package com.example.bookstore.book;
+package com.example.bookstore.controllers;
 
+import com.example.bookstore.services.BookService;
+import com.example.bookstore.models.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +13,7 @@ import java.util.List;
 @RequestMapping(path = "api/books")
 public class BookController {
 
-    BookService service;
+    private final BookService service;
 
     @Autowired // For Dependency Injection
     public BookController(BookService service) {

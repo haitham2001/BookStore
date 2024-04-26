@@ -1,21 +1,25 @@
-package com.example.bookstore.user;
+package com.example.bookstore.models;
 
 import jakarta.persistence.*;
 
+import java.util.Collections;
+import java.util.List;
+
 @Entity
-@Table
+@Table(name = "users")
 public class User {
 
     @Id
-    @SequenceGenerator(name = "number-generator", sequenceName = "number-generator", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "number-generator")
+    @SequenceGenerator(name = "users_SEQ", sequenceName = "users_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_SEQ")
     private Long id;
 
     private String fullName;
     private String email;
     private String password;
-    private String billingAddress;
-    private String paymentInfo;
+
+    @OneToMany
+    private List<Book> ownedBooks;
 
     public User() {
     }
@@ -23,15 +27,12 @@ public class User {
     public User(
             String fullName,
             String email,
-            String password,
-            String billingAddress,
-            String paymentInfo
+            String password
     ) {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
-        this.billingAddress = billingAddress;
-        this.paymentInfo = paymentInfo;
+        this.ownedBooks = Collections.emptyList();
     }
 
     public Long getId() {
@@ -62,19 +63,11 @@ public class User {
         this.password = password;
     }
 
-    public String getBillingAddress() {
-        return billingAddress;
+    public List<Book> getOwnedBooks() {
+        return ownedBooks;
     }
 
-    public void setBillingAddress(String billingAddress) {
-        this.billingAddress = billingAddress;
-    }
-
-    public String getPaymentInfo() {
-        return paymentInfo;
-    }
-
-    public void setPaymentInfo(String paymentInfo) {
-        this.paymentInfo = paymentInfo;
+    public void setOwnedBooks(List<Book> ownedBooks) {
+        this.ownedBooks = ownedBooks;
     }
 }
