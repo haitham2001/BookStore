@@ -3,9 +3,7 @@ package com.example.bookstore.controllers;
 import com.example.bookstore.services.BookService;
 import com.example.bookstore.models.Book;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,8 +18,42 @@ public class BookController {
         this.service = service;
     }
 
-    @GetMapping(path = "get-all")
+    @GetMapping
     public List<Book> getAllBooks(){
-        return service.getALlBooks();
+        return service.getALLBooks();
+    }
+
+    @GetMapping("addStatic")
+    public void addStatic(){
+        service.addStatic();
+    }
+
+    @GetMapping(path = "{bookId}")
+    public Book getBookById(@PathVariable("bookId") Integer id){
+        return service.getBookById(id);
+    }
+
+    @GetMapping(path = "book")
+    public List<Book> filterBook(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String author,
+            @RequestParam(required = false) String genre
+    ){
+        return service.filterBook(title, author, genre);
+    }
+
+    @PostMapping
+    public void addBook(@RequestBody Book book){
+        service.addBook(book);
+    }
+
+    @DeleteMapping(path = "{bookId}")
+    public void deleteBook(@PathVariable("bookId") Integer id){
+        service.deleteBook(id);
+    }
+
+    @DeleteMapping
+    public void deleteAll(){
+        service.deleteALlBooks();
     }
 }

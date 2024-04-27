@@ -1,11 +1,13 @@
 package com.example.bookstore.models;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 @Entity
 @Table
+@AllArgsConstructor
+@Builder
 public class Book {
 
     @Id

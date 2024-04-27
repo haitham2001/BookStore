@@ -1,6 +1,7 @@
 package com.example.bookstore.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.Collections;
 import java.util.List;
@@ -12,9 +13,11 @@ public class User {
     @Id
     @SequenceGenerator(name = "users_SEQ", sequenceName = "users_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_SEQ")
-    private Long id;
+    private Integer id;
 
     private String fullName;
+
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@gmail\\.com$", message = "Invalid email format")
     private String email;
     private String password;
 
@@ -35,7 +38,7 @@ public class User {
         this.ownedBooks = Collections.emptyList();
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
