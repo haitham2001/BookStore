@@ -1,5 +1,6 @@
 package com.example.bookstore.controllers;
 
+import com.example.bookstore.models.Book;
 import com.example.bookstore.models.User;
 import com.example.bookstore.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,27 +29,32 @@ public class UserController {
         service.createUser(user);
     }
 
-    @DeleteMapping(path = "{userEmail}")
-    public void deleteUser(@PathVariable("userEmail") String userEmail){
-        service.deleteUser(userEmail);
+    @DeleteMapping(path = "{userId}")
+    public void deleteUser(@PathVariable("userId") Integer id){
+        service.deleteUser(id);
     }
 
-    @PutMapping(path = "{userEmail}")
+    @PutMapping(path = "{userId}")
     public void updateUser(
-            @PathVariable("{userEmail}") String userEmail,
+            @PathVariable("userId") Integer id,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String password
     ){
-        service.updateUser(userEmail, name, email, password);
+        service.updateUser(id, name, email, password);
     }
 
     @PutMapping(path = "{userId}/{bookId}")
     public void addBookToUser(
-            @PathVariable Integer bookId,
-            @PathVariable Integer userId
+            @PathVariable("bookId") Integer bookId,
+            @PathVariable("userId") Integer userId
     ){
         service.addBookToUser(bookId, userId);
+    }
+
+    @GetMapping(path = "{userId}/recommended-books")
+    public List<Book> getRecommendation(@PathVariable("userId") Integer id) {
+        return service.getRecommendation(id);
     }
 
     @DeleteMapping(path = "{userId}/{bookId}")

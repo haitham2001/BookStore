@@ -46,9 +46,4 @@ public class BookController {
     public void deleteBook(@PathVariable("bookId") Integer id){
         service.deleteBook(id);
     }
-
-    @DeleteMapping
-    public void deleteAll(){
-        service.deleteALlBooks();
-    }
 }

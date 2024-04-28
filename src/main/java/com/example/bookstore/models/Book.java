@@ -24,9 +24,6 @@ public class Book {
     private Double price;
     private Integer availableQuantity;
 
-    @ManyToMany
-    private List<User> users;
-
     public Book() {
     }
 

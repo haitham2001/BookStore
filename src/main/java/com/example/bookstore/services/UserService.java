@@ -8,8 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.example.bookstore.StaticData.addTheseUsers;
 
@@ -37,25 +36,25 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(String userEmail) {
-        Optional<User> user = userRepository.findByEmail(userEmail);
+    public void deleteUser(Integer id) {
+        Optional<User> user = userRepository.findById(id);
 
         if(user.isEmpty())
-            throw new IllegalStateException("No User with that email exists");
+            throw new IllegalStateException("This user doesn't exist");
 
         userRepository.deleteById(user.get().getId());
     }
 
     @Transactional
     public void updateUser(
-            String userEmail,
+            Integer id,
             String name,
             String email,
             String password
     ) {
-        User user = userRepository.findByEmail(userEmail)
+        User user = userRepository.findById(id)
                 .orElseThrow(
-                        () -> new IllegalStateException("No User with that email exists")
+                        () -> new IllegalStateException("This user doesn't exist")
                 );
         if(userRepository.findByEmail(email).isPresent())
             throw new IllegalStateException("Can't update to that email: Email already exists");
@@ -84,8 +83,51 @@ public class UserService {
     @Transactional
     public void removeBookInUser(Integer bookId, Integer userId) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new IllegalStateException("Book not found"));
-
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User not found"));
+
+        if(!user.getOwnedBooks().contains(book))
+            throw new IllegalStateException("User doesn't have that book");
+        book.setAvailableQuantity(book.getAvailableQuantity() + 1);
+
         user.getOwnedBooks().remove(book);
+    }
+
+    public List<Book> getRecommendation(Integer id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(
+                        () -> new IllegalStateException("User not found")
+                );
+
+        List<Book> userBooks = user.getOwnedBooks();
+
+        if(userBooks.isEmpty())
+            throw new IllegalStateException("User doesn't have any books");
+
+        String mostCommonGenre = getMostCommonGenre(userBooks);
+
+        List<Book> genreBooks = bookRepository.findByGenre(mostCommonGenre)
+                .orElseThrow(
+                        () -> new IllegalStateException("")
+                );
+
+        return genreBooks;
+    }
+
+    private String getMostCommonGenre(List<Book> userBooks) {
+        HashMap<String, Integer> freqMap = new HashMap<String, Integer>();
+
+        for(Book book : userBooks) {
+            String temp = book.getGenre();
+
+            if(freqMap.containsKey(temp))
+                freqMap.put(temp, freqMap.get(temp)+1);
+            else
+                freqMap.put(temp, 1);
+        }
+
+        PriorityQueue<String> maxPriorityHeap = new PriorityQueue<>((a, b) -> freqMap.get(b) - freqMap.get(a));
+        maxPriorityHeap.addAll(freqMap.keySet());
+
+        return maxPriorityHeap.poll();
     }
 }
