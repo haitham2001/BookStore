@@ -21,7 +21,7 @@ public class User {
     private String email;
     private String password;
 
-    @OneToMany
+    @ManyToMany
     private List<Book> ownedBooks;
 
     public User() {

@@ -23,11 +23,6 @@ public class UserController {
         return service.getALL();
     }
 
-    @GetMapping("addStatic")
-    public void addStatic(){
-        service.addStatic();
-    }
-
     @PostMapping()
     public void createUser(@RequestBody User user){
         service.createUser(user);
@@ -46,5 +41,21 @@ public class UserController {
             @RequestParam(required = false) String password
     ){
         service.updateUser(userEmail, name, email, password);
+    }
+
+    @PutMapping(path = "{userId}/{bookId}")
+    public void addBookToUser(
+            @PathVariable Integer bookId,
+            @PathVariable Integer userId
+    ){
+        service.addBookToUser(bookId, userId);
+    }
+
+    @DeleteMapping(path = "{userId}/{bookId}")
+    public void removeBookInUser(
+            @PathVariable Integer bookId,
+            @PathVariable Integer userId
+    ){
+        service.removeBookInUser(bookId, userId);
     }
 }

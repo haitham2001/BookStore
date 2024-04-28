@@ -48,7 +48,7 @@ public class BookService {
     }
 
     public void addBook(Book book) {
-        Optional<Book> databaseBook = repository.findByISBN(book.getIsbn());
+        Optional<Book> databaseBook = repository.findById(book.getId());
         if (databaseBook.isPresent())
             throw new IllegalStateException("Book already exists in database");
         repository.save(book);
@@ -67,10 +67,5 @@ public class BookService {
                 .build();
 
         return repository.findAll(Example.of(book));
-    }
-
-
-    public void addStatic(){
-        repository.saveAll(addTheseBooks());
     }
 }

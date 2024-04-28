@@ -23,11 +23,6 @@ public class BookController {
         return service.getALLBooks();
     }
 
-    @GetMapping("addStatic")
-    public void addStatic(){
-        service.addStatic();
-    }
-
     @GetMapping(path = "{bookId}")
     public Book getBookById(@PathVariable("bookId") Integer id){
         return service.getBookById(id);

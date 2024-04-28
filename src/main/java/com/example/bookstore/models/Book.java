@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+import java.util.List;
+
 @Entity
 @Table
 @AllArgsConstructor
@@ -21,6 +23,9 @@ public class Book {
     private String genre;
     private Double price;
     private Integer availableQuantity;
+
+    @ManyToMany
+    private List<User> users;
 
     public Book() {
     }

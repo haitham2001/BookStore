@@ -1,45 +1,49 @@
 package com.example.bookstore.services;
 
+import com.example.bookstore.models.Book;
 import com.example.bookstore.models.User;
+import com.example.bookstore.repositories.BookRepository;
 import com.example.bookstore.repositories.UserRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Pattern;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.bookstore.StaticData.addTheseBooks;
 import static com.example.bookstore.StaticData.addTheseUsers;
 
 @Service
 public class UserService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+    private final BookRepository bookRepository;
 
-    public UserService(UserRepository repository) {
-        this.repository = repository;
+    @Autowired
+    public UserService(UserRepository userRepository, BookRepository bookRepository) {
+        this.userRepository = userRepository;
+        this.bookRepository = bookRepository;
     }
 
     public List<User> getALL() {
-        return repository.findAll();
+        return userRepository.findAll();
     }
 
     public void createUser(User user) {
-        boolean userExists = repository.findByEmail(user.getEmail()).isPresent();
+        boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
 
         if(userExists)
             throw new IllegalStateException("Cannot create user: User already exists");
-        repository.save(user);
+        userRepository.save(user);
     }
 
     public void deleteUser(String userEmail) {
-        Optional<User> user = repository.findByEmail(userEmail);
+        Optional<User> user = userRepository.findByEmail(userEmail);
 
         if(user.isEmpty())
             throw new IllegalStateException("No User with that email exists");
 
-        repository.deleteById(user.get().getId());
+        userRepository.deleteById(user.get().getId());
     }
 
     @Transactional
@@ -49,11 +53,11 @@ public class UserService {
             String email,
             String password
     ) {
-        User user = repository.findByEmail(userEmail)
+        User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(
                         () -> new IllegalStateException("No User with that email exists")
                 );
-        if(repository.findByEmail(email).isPresent())
+        if(userRepository.findByEmail(email).isPresent())
             throw new IllegalStateException("Can't update to that email: Email already exists");
 
         if(name != null && !name.isEmpty())
@@ -62,12 +66,26 @@ public class UserService {
             user.setEmail(email);
         if(password != null && !password.isEmpty())
             user.setPassword(password);
-
     }
 
+    @Transactional
+    public void addBookToUser(Integer bookId, Integer userId) {
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new IllegalStateException("Book not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User not found"));
 
+        int quantity = book.getAvailableQuantity();
+        if(quantity == 0)
+            throw new IllegalStateException("Book is out of stock");
+        book.setAvailableQuantity(quantity - 1);
 
-    public void addStatic() {
-        repository.saveAll(addTheseUsers());
+        user.getOwnedBooks().add(book);
+    }
+
+    @Transactional
+    public void removeBookInUser(Integer bookId, Integer userId) {
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new IllegalStateException("Book not found"));
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User not found"));
+        user.getOwnedBooks().remove(book);
     }
 }
