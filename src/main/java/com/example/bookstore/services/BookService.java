@@ -48,7 +48,7 @@ public class BookService {
     }
 
     public void addBook(Book book) {
-        Optional<Book> databaseBook = repository.findById(book.getId());
+        Optional<Book> databaseBook = repository.findByISBN(book.getIsbn());
         if (databaseBook.isPresent())
             throw new IllegalStateException("Book already exists in database");
         repository.save(book);

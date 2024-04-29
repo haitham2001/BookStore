@@ -3,6 +3,7 @@ package com.example.bookstore.controllers;
 import com.example.bookstore.models.Book;
 import com.example.bookstore.models.User;
 import com.example.bookstore.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public void createUser(@RequestBody User user){
+    public void createUser(@Valid @RequestBody User user){
         service.createUser(user);
     }
 

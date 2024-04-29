@@ -11,4 +11,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     @Query("SELECT b FROM Book b WHERE b.genre = ?1")
     Optional<List<Book>> findByGenre(String genre);
+
+    @Query("SELECT b FROM Book b WHERE b.isbn = ?1")
+    Optional<Book> findByISBN(String isbn);
 }

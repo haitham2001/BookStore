@@ -5,12 +5,13 @@ import com.example.bookstore.models.User;
 import com.example.bookstore.repositories.BookRepository;
 import com.example.bookstore.repositories.UserRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.*;
-
-import static com.example.bookstore.StaticData.addTheseUsers;
 
 @Service
 public class UserService {
@@ -33,6 +34,7 @@ public class UserService {
 
         if(userExists)
             throw new IllegalStateException("Cannot create user: User already exists");
+
         userRepository.save(user);
     }
 
@@ -45,7 +47,6 @@ public class UserService {
         userRepository.deleteById(user.get().getId());
     }
 
-    @Transactional
     public void updateUser(
             Integer id,
             String name,
@@ -65,6 +66,11 @@ public class UserService {
             user.setEmail(email);
         if(password != null && !password.isEmpty())
             user.setPassword(password);
+
+        @Valid
+        User checker = user;
+
+        userRepository.save(user);
     }
 
     @Transactional

@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/bookstore
     username: haitham
-    password: mod8112001
+    password:
   jpa:
     hibernate:
       ddl-auto: create-drop
